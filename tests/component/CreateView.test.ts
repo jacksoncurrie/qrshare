@@ -7,7 +7,15 @@ const RouterLinkStub = {
 }
 
 describe('CreateView', () => {
-  it('disables generate for empty input', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('keeps the link empty for empty input', () => {
     const wrapper = mount(CreateView, {
       global: {
         stubs: {
@@ -17,10 +25,13 @@ describe('CreateView', () => {
       },
     })
 
+    expect(
+      (wrapper.get('#generated-link').element as HTMLInputElement).value,
+    ).toBe('')
     expect(wrapper.get('button').attributes('disabled')).toBeDefined()
   })
 
-  it('shows warning and blocks oversized payloads', async () => {
+  it('shows an error for oversized payloads', async () => {
     const wrapper = mount(CreateView, {
       global: {
         stubs: {
@@ -29,15 +40,18 @@ describe('CreateView', () => {
         },
       },
     })
-
-    await wrapper.get('#payload-input').setValue('a'.repeat(500))
-    expect(wrapper.text()).toContain('may be harder to scan')
 
     await wrapper.get('#payload-input').setValue('a'.repeat(801))
-    expect(wrapper.get('button').attributes('disabled')).toBeDefined()
+    vi.advanceTimersByTime(120)
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain('too large for QR Share v1')
+    expect(
+      (wrapper.get('#generated-link').element as HTMLInputElement).value,
+    ).toBe('')
   })
 
-  it('generates a link for valid input', async () => {
+  it('generates a link automatically for valid input', async () => {
     const wrapper = mount(CreateView, {
       global: {
         stubs: {
@@ -48,7 +62,8 @@ describe('CreateView', () => {
     })
 
     await wrapper.get('#payload-input').setValue('hello world')
-    await wrapper.get('button').trigger('click')
+    vi.advanceTimersByTime(120)
+    await wrapper.vm.$nextTick()
 
     expect(
       (wrapper.get('#generated-link').element as HTMLInputElement).value,

@@ -1,5 +1,5 @@
 {
-  "name": "proxisend",
+  "name": "qrshare",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/copy-404.mjs",
-    "preview": "vite preview",
+    "preview": "VITE_PUBLIC_BASE=/ npm run build && vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "vue-tsc --noEmit",

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { ROUTE_TITLES, ROUTES } from '@/lib/constants'
 import NotFoundView from '@/views/NotFoundView.vue'
 import CreateView from '@/views/CreateView.vue'
+import ScanView from '@/views/ScanView.vue'
 import ViewPayloadView from '@/views/ViewPayloadView.vue'
 
 const router = createRouter({
@@ -16,6 +17,14 @@ const router = createRouter({
       component: CreateView,
       meta: {
         title: ROUTE_TITLES[ROUTES.create],
+      },
+    },
+    {
+      path: ROUTES.scan,
+      component: ScanView,
+      meta: {
+        title: ROUTE_TITLES[ROUTES.scan],
+        fullscreen: true,
       },
     },
     {

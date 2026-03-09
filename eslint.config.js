@@ -8,7 +8,13 @@ import prettier from 'eslint-config-prettier'
 
 export default [
   {
-    ignores: ['dist/**', 'coverage/**', 'output/**'],
+    ignores: [
+      'dev-dist/**',
+      'dist/**',
+      'coverage/**',
+      'output/**',
+      'test-results/**',
+    ],
   },
   js.configs.recommended,
   ...vue.configs['flat/recommended'],

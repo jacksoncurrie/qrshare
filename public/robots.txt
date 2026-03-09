@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jacksoncurrie.github.io/proxisend/sitemap.xml
+Sitemap: https://jacksoncurrie.github.io/qrshare/sitemap.xml

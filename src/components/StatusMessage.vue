@@ -13,33 +13,27 @@ defineProps<{
 <style scoped>
 .status {
   margin: 0;
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--color-border);
   font-size: 0.95rem;
+  line-height: 1.4;
+  background: var(--color-panel-muted);
 }
 
 .status--info {
-  background: #eff6ff;
-  border-color: #bfdbfe;
-  color: #1d4ed8;
+  color: color-mix(in srgb, var(--color-text) 85%, #2a7fff);
 }
 
 .status--success {
-  background: #ecfdf5;
-  border-color: #86efac;
-  color: #166534;
+  color: var(--color-success);
 }
 
 .status--warning {
-  background: #fffbeb;
-  border-color: #fcd34d;
-  color: #92400e;
+  color: var(--color-warning);
 }
 
 .status--error {
-  background: #fef2f2;
-  border-color: #fca5a5;
-  color: #b91c1c;
+  color: var(--color-error);
 }
 </style>

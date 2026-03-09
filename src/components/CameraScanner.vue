@@ -1,11 +1,22 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import StatusMessage from '@/components/StatusMessage.vue'
 import {
   createScannerAdapter,
   getScannerErrorMessage,
   ScannerError,
 } from '@/lib/scanner'
+
+const props = withDefaults(
+  defineProps<{
+    autoStart?: boolean
+    showControls?: boolean
+  }>(),
+  {
+    autoStart: false,
+    showControls: true,
+  },
+)
 
 const emit = defineEmits<{
   decoded: [value: string]
@@ -16,16 +27,15 @@ const scannerState = ref<'idle' | 'active'>('idle')
 const message = ref('')
 let adapter: ReturnType<typeof createScannerAdapter> | null = null
 
-const buttonLabel = computed(() =>
-  scannerState.value === 'active' ? 'Stop scanning' : 'Scan QR',
-)
+function stopScanner() {
+  adapter?.stop()
+  adapter?.destroy()
+  adapter = null
+  scannerState.value = 'idle'
+}
 
-async function toggleScanner() {
+async function startScanner() {
   if (scannerState.value === 'active') {
-    adapter?.stop()
-    adapter?.destroy()
-    adapter = null
-    scannerState.value = 'idle'
     return
   }
 
@@ -40,18 +50,18 @@ async function toggleScanner() {
       videoRef.value,
       (value) => {
         emit('decoded', value)
-        adapter?.stop()
-        scannerState.value = 'idle'
+        stopScanner()
       },
       (error) => {
         message.value = getScannerErrorMessage(error.code)
-        scannerState.value = 'idle'
+        stopScanner()
       },
     )
 
     await adapter.start()
     scannerState.value = 'active'
   } catch (error) {
+    stopScanner()
     const errorCode =
       error instanceof ScannerError
         ? error.code
@@ -68,24 +78,39 @@ async function toggleScanner() {
   }
 }
 
+async function toggleScanner() {
+  if (scannerState.value === 'active') {
+    stopScanner()
+    return
+  }
+
+  await startScanner()
+}
+
+onMounted(() => {
+  if (props.autoStart) {
+    void startScanner()
+  }
+})
+
 onBeforeUnmount(() => {
-  adapter?.stop()
-  adapter?.destroy()
+  stopScanner()
 })
 </script>
 
 <template>
   <section class="panel">
-    <div class="panel__header">
+    <div v-if="showControls" class="panel__header">
       <h2>Scan a QR code</h2>
       <button class="button" type="button" @click="toggleScanner">
-        {{ buttonLabel }}
+        {{ scannerState === 'active' ? 'Stop scanning' : 'Scan QR' }}
       </button>
     </div>
 
     <video
       ref="videoRef"
       class="scanner-video"
+      :class="{ 'scanner-video--with-header': showControls }"
       playsinline
       muted
       aria-label="Camera preview"
@@ -108,10 +133,13 @@ onBeforeUnmount(() => {
 
 .scanner-video {
   width: 100%;
-  margin-top: var(--space-4);
   aspect-ratio: 4 / 3;
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, #cbd5e1, #e2e8f0);
   border: 1px solid var(--color-border);
+}
+
+.scanner-video--with-header {
+  margin-top: var(--space-4);
 }
 </style>

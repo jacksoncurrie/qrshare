@@ -1,38 +1,44 @@
 <script setup lang="ts">
-import { APP_REPO_URL } from '@/lib/constants'
+import { APP_AUTHOR_NAME, APP_AUTHOR_URL } from '@/lib/constants'
 </script>
 
 <template>
   <footer class="footer">
     <div class="footer__inner">
       <p>
-        QR Share stores nothing on a server. Anyone with the link or QR can read
-        the text.
+        Built by
+        <a :href="APP_AUTHOR_URL" target="_blank" rel="noreferrer">{{
+          APP_AUTHOR_NAME
+        }}</a>
       </p>
-      <a :href="APP_REPO_URL" target="_blank" rel="noreferrer">GitHub</a>
     </div>
   </footer>
 </template>
 
 <style scoped>
 .footer {
-  border-top: 1px solid var(--color-border);
-  background: color-mix(in srgb, var(--color-surface) 92%, white);
+  padding: 0 var(--space-4) var(--space-5);
 }
 
 .footer__inner {
-  width: min(100%, var(--content-max-width));
+  width: min(100%, 56rem);
   margin: 0 auto;
-  padding: var(--space-4);
+  padding: 0.9rem 1rem;
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  justify-content: space-between;
+  justify-content: center;
   color: var(--color-muted);
-  font-size: 0.9375rem;
+  font-size: 0.92rem;
+  border: 1px solid var(--color-border);
+  border-radius: calc(var(--radius-lg) - 0.15rem);
+  background: color-mix(in srgb, var(--color-surface-strong) 72%, transparent);
 }
 
 .footer__inner p {
   margin: 0;
+}
+
+.footer__inner a {
+  color: var(--color-text);
+  text-decoration: none;
 }
 </style>

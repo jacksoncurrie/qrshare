@@ -8,9 +8,7 @@ test('app shell works offline after first load', async ({ page, context }) => {
 
   await context.setOffline(true)
   await page.reload()
-  await expect(
-    page.getByRole('heading', { name: 'Generate a QR Share link' }),
-  ).toBeVisible()
+  await expect(page.getByLabel('Text to share')).toBeVisible()
 
   await page.evaluate(() => {
     window.history.pushState(

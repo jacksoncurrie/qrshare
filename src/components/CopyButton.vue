@@ -49,9 +49,26 @@ async function copyText() {
 </script>
 
 <template>
-  <button class="button button--secondary" type="button" @click="copyText">
+  <button class="copy-button" type="button" :disabled="!text" @click="copyText">
     <span v-if="status === 'idle'">{{ idleLabel ?? 'Copy' }}</span>
     <span v-else-if="status === 'success'">Copied</span>
     <span v-else>Copy failed</span>
   </button>
 </template>
+
+<style scoped>
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-panel-muted);
+  color: var(--color-text);
+  white-space: nowrap;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+</style>

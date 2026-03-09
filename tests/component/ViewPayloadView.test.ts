@@ -45,12 +45,11 @@ describe('ViewPayloadView', () => {
     expect(wrapper.text()).toContain('could not decode that payload')
   })
 
-  it('rejects non-app manual input', async () => {
+  it('shows a message when the payload is missing', async () => {
+    window.location.hash = ''
     const wrapper = await mountView()
 
-    await wrapper.get('#manual-input').setValue('https://example.com')
-    await wrapper.get('button').trigger('click')
-
-    expect(wrapper.text()).toContain('not a QR Share link or payload')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.text()).toContain('No QR Share payload was found')
   })
 })

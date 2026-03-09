@@ -24,11 +24,23 @@ vi.mock('@/lib/scanner', () => ({
 }))
 
 describe('CameraScanner', () => {
+  beforeEach(() => {
+    startMock.mockReset()
+    stopMock.mockReset()
+    destroyMock.mockReset()
+  })
+
   it('shows a permission denied state', async () => {
     startMock.mockRejectedValueOnce({ code: 'permission_denied' })
-    const wrapper = mount(CameraScanner)
+    const wrapper = mount(CameraScanner, {
+      props: {
+        autoStart: true,
+        showControls: false,
+      },
+    })
 
-    await wrapper.get('button').trigger('click')
+    await wrapper.vm.$nextTick()
+    await Promise.resolve()
     await wrapper.vm.$nextTick()
 
     expect(wrapper.text()).toContain('Camera access was denied')

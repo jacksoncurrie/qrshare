@@ -3,12 +3,13 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 
-const repoSlug = 'proxisend'
+const repoSlug = 'qrshare'
 const productionBase = `/${repoSlug}/`
 
 export default defineConfig(({ command }) => {
   const publicBase =
     process.env.VITE_PUBLIC_BASE ?? (command === 'serve' ? '/' : productionBase)
+  const enablePwaInDev = process.env.VITE_ENABLE_PWA_DEV === 'true'
 
   return {
     base: publicBase,
@@ -63,7 +64,7 @@ export default defineConfig(({ command }) => {
           navigateFallback: 'index.html',
         },
         devOptions: {
-          enabled: true,
+          enabled: enablePwaInDev,
         },
       }),
     ],

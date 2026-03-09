@@ -20,7 +20,7 @@
     <meta property="og:type" content="website" />
     <meta
       property="og:url"
-      content="https://jacksoncurrie.github.io/proxisend/"
+      content="https://jacksoncurrie.github.io/qrshare/"
     />
     <meta name="twitter:card" content="summary" />
     <meta
@@ -31,9 +31,25 @@
       name="twitter:description"
       content="A tiny offline-friendly PWA for sharing short text and links between nearby devices using QR codes."
     />
-    <link rel="canonical" href="https://jacksoncurrie.github.io/proxisend/" />
+    <link rel="canonical" href="https://jacksoncurrie.github.io/qrshare/" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script>
+      ;(() => {
+        const storedTheme = window.localStorage.getItem('qr-share-theme')
+        const prefersDark = window.matchMedia(
+          '(prefers-color-scheme: dark)',
+        ).matches
+        const theme =
+          storedTheme === 'light' || storedTheme === 'dark'
+            ? storedTheme
+            : prefersDark
+              ? 'dark'
+              : 'light'
+
+        document.documentElement.dataset.theme = theme
+      })()
+    </script>
   </head>
   <body>
     <div id="app"></div>

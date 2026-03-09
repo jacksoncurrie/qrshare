@@ -4,7 +4,7 @@ QR Share is a small open-source PWA for handing short text between nearby device
 
 It creates app-specific URLs like `/view#v1.p.<payload>`, renders them as QR codes, and decodes them locally on the receiving device. There is no backend, no account system, and no cloud storage.
 
-Live demo: [https://jacksoncurrie.github.io/proxisend/](https://jacksoncurrie.github.io/proxisend/)
+Live demo: [https://jacksoncurrie.github.io/qrshare/](https://jacksoncurrie.github.io/qrshare/)
 
 ## Why This Exists
 
@@ -19,7 +19,7 @@ It is not trying to be a secret-sharing tool, a file transfer app, or a general 
 
 ## Features
 
-- Enter short text and generate an app-specific QR Share link.
+- Enter short text and generate an app-specific QR Share link automatically.
 - Render that link as a QR code for a second device to scan.
 - Open a QR Share URL directly and decode the payload locally.
 - Scan QR Share codes with the device camera.
@@ -33,7 +33,7 @@ It is not trying to be a secret-sharing tool, a file transfer app, or a general 
 
 ![QR Share create screen](docs/assets/create-screen.png)
 
-Create a short share link and QR code from plain text.
+Type once and get a share link and QR code immediately.
 
 ### View
 
@@ -82,7 +82,6 @@ See [SECURITY.md](SECURITY.md) for reporting guidance and security boundaries.
 ## Limits And Caveats
 
 - v1 supports plain text only.
-- Warnings start at 500 UTF-8 bytes.
 - Payloads above 800 UTF-8 bytes are blocked.
 - QR Share only accepts app-specific QR payloads in v1.
 - First-time visitors who are fully offline cannot load the app until it has been cached once.
@@ -155,7 +154,7 @@ Notes:
 
 Production is designed for GitHub Pages.
 
-- The production base path is `/proxisend/`.
+- The production base path is `/qrshare/`.
 - `npm run build` also copies `dist/index.html` to `dist/404.html` for SPA fallback support on GitHub Pages.
 - CI and deployment workflows live in [ci.yml](.github/workflows/ci.yml) and [deploy.yml](.github/workflows/deploy.yml).
 
