@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import StatusMessage from '@/components/StatusMessage.vue'
 import {
   createScannerAdapter,
   getScannerErrorMessage,
@@ -12,11 +11,13 @@ const props = withDefaults(
     autoStart?: boolean
     showControls?: boolean
     square?: boolean
+    errorMessage?: string
   }>(),
   {
     autoStart: false,
     showControls: true,
     square: false,
+    errorMessage: '',
   },
 )
 
@@ -109,28 +110,35 @@ onBeforeUnmount(() => {
       </button>
     </div>
 
-    <video
-      ref="videoRef"
-      class="scanner-video"
-      :class="{
-        'scanner-video--with-header': showControls,
-        'scanner-video--square': square,
-      }"
-      playsinline
-      muted
-      aria-label="Camera preview"
-    />
     <div
-      class="scanner-guide"
-      :class="{ 'scanner-guide--with-header': showControls }"
-      aria-hidden="true"
+      class="scanner-frame"
+      :class="{ 'scanner-frame--with-header': showControls }"
     >
-      <span class="scanner-guide__corner scanner-guide__corner--top-left" />
-      <span class="scanner-guide__corner scanner-guide__corner--top-right" />
-      <span class="scanner-guide__corner scanner-guide__corner--bottom-left" />
-      <span class="scanner-guide__corner scanner-guide__corner--bottom-right" />
+      <video
+        ref="videoRef"
+        class="scanner-video"
+        :class="{
+          'scanner-video--error': errorMessage || message,
+          'scanner-video--square': square,
+        }"
+        playsinline
+        muted
+        aria-label="Camera preview"
+      />
+      <div class="scanner-guide" aria-hidden="true">
+        <span class="scanner-guide__corner scanner-guide__corner--top-left" />
+        <span class="scanner-guide__corner scanner-guide__corner--top-right" />
+        <span
+          class="scanner-guide__corner scanner-guide__corner--bottom-left"
+        />
+        <span
+          class="scanner-guide__corner scanner-guide__corner--bottom-right"
+        />
+      </div>
     </div>
-    <StatusMessage v-if="message" tone="warning">{{ message }}</StatusMessage>
+    <p v-if="errorMessage || message" class="scanner-error">
+      {{ errorMessage || message }}
+    </p>
   </section>
 </template>
 
@@ -164,8 +172,23 @@ onBeforeUnmount(() => {
   justify-self: stretch;
 }
 
-.scanner-video--with-header {
+.scanner-video--error {
+  border-color: var(--color-error);
+}
+
+.scanner-frame {
+  position: relative;
+}
+
+.scanner-frame--with-header {
   margin-top: var(--space-4);
+}
+
+.scanner-error {
+  margin: 0.35rem 0 0;
+  color: var(--color-error);
+  font-size: 0.95rem;
+  text-align: center;
 }
 
 .scanner-guide {
@@ -176,18 +199,17 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
-.scanner-guide--with-header {
-  margin-top: var(--space-4);
-}
-
 .scanner-guide::before {
   content: none;
 }
 
 .scanner-guide__corner {
   position: absolute;
+  top: 50%;
+  left: 50%;
   width: min(62%, 12rem);
   aspect-ratio: 1;
+  transform: translate(-50%, -50%);
 }
 
 .scanner-guide__corner::before,
@@ -255,10 +277,6 @@ onBeforeUnmount(() => {
 }
 
 .panel {
-  position: relative;
-}
-
-section {
   position: relative;
 }
 </style>

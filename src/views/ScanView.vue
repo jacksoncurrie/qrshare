@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import CameraScanner from '@/components/CameraScanner.vue'
-import StatusMessage from '@/components/StatusMessage.vue'
 import { ROUTES } from '@/lib/constants'
 import {
   getPayloadErrorMessage,
@@ -40,13 +39,11 @@ function handleDecodedValue(value: string) {
     <div class="scan-view__content">
       <CameraScanner
         auto-start
+        :error-message="errorMessage"
         :show-controls="false"
         square
         @decoded="handleDecodedValue"
       />
-      <StatusMessage v-if="errorMessage" tone="warning">
-        {{ errorMessage }}
-      </StatusMessage>
     </div>
   </div>
 </template>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import CopyButton from '@/components/CopyButton.vue'
-import StatusMessage from '@/components/StatusMessage.vue'
 import {
   getPayloadErrorMessage,
   parsePayload,
@@ -47,17 +46,22 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="view-payload">
-    <StatusMessage v-if="errorMessage" tone="error">{{
-      errorMessage
-    }}</StatusMessage>
-    <section v-else-if="decodedText" class="view-payload__content">
+    <section class="view-payload__content">
       <textarea
         class="view-payload__textarea"
+        :class="{ 'view-payload__textarea--error': errorMessage }"
         :value="decodedText"
         disabled
         aria-label="Decoded text"
       />
-      <CopyButton :text="decodedText" idle-label="Copy text" />
+      <p v-if="errorMessage" class="view-payload__error">
+        {{ errorMessage }}
+      </p>
+      <CopyButton
+        v-else-if="decodedText"
+        :text="decodedText"
+        idle-label="Copy text"
+      />
     </section>
   </div>
 </template>
@@ -80,5 +84,16 @@ onBeforeUnmount(() => {
   resize: none;
   font-size: 1rem;
   line-height: 1.6;
+}
+
+.view-payload__textarea--error {
+  border-color: var(--color-error);
+}
+
+.view-payload__error {
+  margin: 0;
+  color: var(--color-error);
+  font-size: 0.95rem;
+  text-align: center;
 }
 </style>

@@ -5,6 +5,12 @@ import ScanView from '@/views/ScanView.vue'
 
 const CameraScannerStub = defineComponent({
   name: 'CameraScanner',
+  props: {
+    errorMessage: {
+      type: String,
+      default: '',
+    },
+  },
   emits: ['decoded'],
   template: '<div class="camera-scanner-stub" />',
 })
@@ -42,7 +48,7 @@ describe('ScanView', () => {
       .vm.$emit('decoded', 'https://example.com/not-qr-share')
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.text()).toContain(
+    expect(wrapper.getComponent(CameraScannerStub).props('errorMessage')).toBe(
       'This QR code is not a QR Share link or payload.',
     )
     expect(router.currentRoute.value.path).toBe('/scan')
