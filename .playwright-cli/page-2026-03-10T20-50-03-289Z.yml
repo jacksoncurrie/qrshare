@@ -1,0 +1,32 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "QR Share QR Share" [ref=e6] [cursor=pointer]:
+        - /url: /create
+        - img "QR Share" [ref=e7]
+        - generic [ref=e8]: QR Share
+      - navigation "Primary" [ref=e9]:
+        - link "Scan" [ref=e10] [cursor=pointer]:
+          - /url: /scan
+          - img [ref=e11]
+          - text: Scan
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - textbox "Text to share" [ref=e15]:
+        - /placeholder: Enter text here to generate the QR code...
+      - generic [ref=e17]:
+        - paragraph [ref=e20]: Waiting for text. QR code will appear here.
+        - button "Copy link" [disabled]:
+          - generic: Click to copy
+  - contentinfo [ref=e21]:
+    - generic [ref=e22]:
+      - paragraph [ref=e23]:
+        - text: Built by
+        - link "Jackson" [ref=e24] [cursor=pointer]:
+          - /url: https://github.com/jacksoncurrie
+      - generic [ref=e25]:
+        - link "View source on GitHub" [ref=e26] [cursor=pointer]:
+          - /url: https://github.com/jacksoncurrie/qrshare
+          - img [ref=e27]
+        - button "Switch to dark mode" [ref=e28] [cursor=pointer]:
+          - img [ref=e29]

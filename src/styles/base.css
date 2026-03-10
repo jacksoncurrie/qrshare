@@ -1,0 +1,145 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-bg);
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--color-text);
+  background: transparent;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body,
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.16em;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 2.875rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+  cursor: pointer;
+  line-height: 1.2;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+  text-decoration: none;
+}
+
+button:hover,
+.button:hover {
+  border-color: var(--color-border-strong);
+}
+
+button:disabled,
+.button[aria-disabled='true'] {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+textarea,
+input {
+  width: 100%;
+  min-height: 2.875rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-input);
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+textarea[readonly],
+input[readonly] {
+  background: var(--color-panel-muted);
+}
+
+textarea {
+  resize: vertical;
+}
+
+textarea::placeholder,
+input::placeholder {
+  color: color-mix(in srgb, var(--color-muted) 82%, transparent);
+}
+
+textarea:not([readonly]):not(:disabled):hover,
+input:not([readonly]):not(:disabled):hover {
+  border-color: color-mix(
+    in srgb,
+    var(--color-border-strong) 78%,
+    var(--color-text)
+  );
+}
+
+textarea:focus,
+input:focus {
+  border-color: var(--color-text);
+  box-shadow: 0 0 0 3px var(--color-focus);
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+h1 {
+  font-size: clamp(1.35rem, 2vw, 1.6rem);
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+p {
+  color: inherit;
+  line-height: 1.6;
+}

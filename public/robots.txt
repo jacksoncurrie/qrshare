@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jacksoncurrie.github.io/qrshare/sitemap.xml

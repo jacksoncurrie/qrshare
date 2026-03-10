@@ -1,0 +1,27 @@
+.panel {
+  padding: clamp(0.875rem, 2vw, 1rem);
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.stack-sm > * + * {
+  margin-top: 0.5rem;
+}
+
+.stack-md > * + * {
+  margin-top: 0.75rem;
+}
+
+.stack-lg > * + * {
+  margin-top: 1rem;
+}
+
+.eyebrow {
+  margin-bottom: var(--space-2);
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
