@@ -17,11 +17,8 @@ Run the full local verification flow:
 
 ```bash
 npm run format
-npm run lint
-npm run typecheck
-npm run test:unit
+npm run verify
 npm run test:e2e
-npm run build
 ```
 
 ## Project Expectations

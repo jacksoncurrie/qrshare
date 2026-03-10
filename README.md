@@ -1,6 +1,6 @@
 # QR Share
 
-QR Share is a small open-source PWA for handing short text between nearby devices with QR codes.
+QR Share is a small open-source PWA for handing off short text between nearby devices with QR codes.
 
 It creates app-specific URLs like `/view#v1.p.<payload>`, renders them as QR codes, and decodes them locally on the receiving device. There is no backend, no account system, and no cloud storage.
 
@@ -20,10 +20,9 @@ It is not trying to be a secret-sharing tool, a file transfer app, or a general 
 ## Features
 
 - Enter short text and generate an app-specific QR Share link automatically.
-- Render that link as a QR code for a second device to scan.
+- Render that link as a QR code and copy the generated link directly from the QR area.
 - Open a QR Share URL directly and decode the payload locally.
 - Scan QR Share codes with the device camera.
-- Paste either a full QR Share URL or a raw `v1.p...` payload.
 - Copy the decoded text with one click.
 - Install and reuse the app offline after it has been cached once.
 
@@ -33,13 +32,13 @@ It is not trying to be a secret-sharing tool, a file transfer app, or a general 
 
 ![QR Share create screen](docs/assets/create-screen.png)
 
-Type once and get a share link and QR code immediately.
+Type once and get the QR code immediately. The QR area also acts as the copy target for the generated link.
 
 ### View
 
 ![QR Share view screen](docs/assets/view-screen.png)
 
-Decode a QR Share payload locally, copy it, or start the scanner flow.
+Open a QR Share payload locally and copy the decoded text.
 
 ## How It Works
 
@@ -74,7 +73,7 @@ Important caveats:
 
 - Anyone with the QR code or link can read the content.
 - QR Share is not suitable for high-value secrets in public settings.
-- Camera access is only requested when the user explicitly starts scanning.
+- Camera access is only requested when the user enters the scan flow.
 - v1 only accepts QR Share payloads, not arbitrary QR content.
 
 See [SECURITY.md](SECURITY.md) for reporting guidance and security boundaries.
@@ -165,8 +164,8 @@ Production is designed for GitHub Pages.
 
 - Keyboard accessible controls and navigation
 - Semantic labels on all inputs and buttons
-- Status and error messaging announced with `aria-live`
-- Strong contrast and visible focus styles
+- Clear inline error messaging and visible focus styles
+- Strong contrast across light and dark themes
 - Mobile-first layout with a single-column flow
 
 ## Project Structure
