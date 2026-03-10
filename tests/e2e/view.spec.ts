@@ -5,8 +5,13 @@ test('generated payload opens in view mode', async ({ page, context }) => {
   await page.goto('.')
   await page.getByLabel('Text to share').fill('copied text payload')
 
-  await expect(page.getByLabel('Share link')).toHaveValue(/\/view#v1\.p\./)
-  const shareUrl = await page.getByLabel('Share link').inputValue()
+  const qr = page.getByAltText('QR code for opening the shared text in QR Share')
+  await expect(qr).toBeVisible()
+
+  await page.getByRole('button', { name: 'Copy link' }).click()
+  const shareUrl = await page.evaluate(() => navigator.clipboard.readText())
+  await expect(shareUrl).toMatch(/\/view#v1\.p\./)
+
   const shareHash = new URL(shareUrl).hash
   await page.evaluate((hash) => {
     window.history.pushState(
