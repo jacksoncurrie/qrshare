@@ -14,7 +14,7 @@ const qrDataUrl = ref('')
 const qrError = ref('')
 const themeVersion = ref(0)
 let latestRequestId = 0
-let stopWatchingTheme = () => undefined
+let stopWatchingTheme: () => void = () => {}
 
 const altText = computed(
   () => `QR code for opening the shared text in ${APP_NAME}`,

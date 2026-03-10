@@ -12,6 +12,8 @@
     "preview": "VITE_PUBLIC_BASE=/ npm run build && vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "check": "npm-run-all lint typecheck",
+    "verify": "npm-run-all check test:unit build",
     "typecheck": "vue-tsc --noEmit",
     "test": "npm-run-all test:unit test:e2e",
     "test:unit": "vitest run",

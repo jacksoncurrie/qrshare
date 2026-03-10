@@ -15,7 +15,7 @@ import {
 const theme = ref<Theme>(getInitialTheme())
 const followsSystem = ref(!hasStoredThemePreference())
 
-let stopWatchingSystemTheme = () => undefined
+let stopWatchingSystemTheme: () => void = () => {}
 
 function setTheme(nextTheme: Theme) {
   theme.value = nextTheme

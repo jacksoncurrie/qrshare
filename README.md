@@ -127,6 +127,8 @@ npm run dev
 npm run build
 npm run preview
 npm run lint
+npm run check
+npm run verify
 npm run format
 npm run typecheck
 npm run test:unit
@@ -138,14 +140,15 @@ npm run test:e2e
 QR Share includes unit, component, and browser-level tests.
 
 ```bash
-npm run lint
-npm run typecheck
-npm run test:unit
+npm run check
+npm run verify
 npm run test:e2e
 ```
 
 Notes:
 
+- `npm run check` runs linting plus Vue/TypeScript typechecking.
+- `npm run verify` runs the main non-browser verification pass: check, unit tests, and production build.
 - Playwright runs against a production preview server.
 - The scanner flow is tested with a deterministic mock instead of a real camera in CI.
 - `npm run build` is part of the expected verification flow before release.

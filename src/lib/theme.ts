@@ -60,7 +60,7 @@ export function watchSystemTheme(
   onThemeChange: (theme: Theme) => void,
 ): () => void {
   if (typeof window === 'undefined') {
-    return () => undefined
+    return () => {}
   }
 
   const mediaQuery = window.matchMedia(darkModeQuery)
