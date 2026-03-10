@@ -101,6 +101,7 @@ export function createScannerAdapter(
       highlightCodeOutline: false,
     },
   )
+  scanner.setInversionMode('both')
 
   return {
     async start() {
