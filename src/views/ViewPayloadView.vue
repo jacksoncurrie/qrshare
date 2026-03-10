@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import DecodedTextPanel from '@/components/DecodedTextPanel.vue'
+import CopyButton from '@/components/CopyButton.vue'
 import StatusMessage from '@/components/StatusMessage.vue'
 import {
   getPayloadErrorMessage,
@@ -50,21 +50,35 @@ onBeforeUnmount(() => {
     <StatusMessage v-if="errorMessage" tone="error">{{
       errorMessage
     }}</StatusMessage>
-    <DecodedTextPanel
-      v-else-if="decodedText"
-      :text="decodedText"
-      :show-clear="false"
-    />
+    <section v-else-if="decodedText" class="view-payload__content">
+      <textarea
+        class="view-payload__textarea"
+        :value="decodedText"
+        disabled
+        aria-label="Decoded text"
+      />
+      <CopyButton :text="decodedText" idle-label="Copy text" />
+    </section>
   </div>
 </template>
 
 <style scoped>
 .view-payload {
-  min-height: 100vh;
-  width: min(100%, 46rem);
+  width: min(100%, var(--content-narrow-width));
   margin: 0 auto;
-  padding: var(--space-4);
   display: grid;
-  align-content: center;
+  gap: var(--space-3);
+}
+
+.view-payload__content {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.view-payload__textarea {
+  min-height: 20rem;
+  resize: none;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 </style>

@@ -117,7 +117,7 @@ export function getPayloadErrorMessage(code: PayloadErrorCode): string {
     case 'empty_input':
       return 'Enter some text before generating a QR code.'
     case 'payload_too_large':
-      return `This text is too large for QR Share v1. Keep it under ${PAYLOAD_MAX_BYTES} bytes.`
+      return 'Text is too large to generate QR code.'
     case 'invalid_format':
       return 'That QR Share payload is not in a valid format.'
     case 'unsupported_version':

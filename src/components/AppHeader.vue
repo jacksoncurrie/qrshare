@@ -1,164 +1,181 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
-import { APP_NAME, APP_REPO_URL, ROUTES } from '@/lib/constants'
+import { computed } from 'vue'
+import backIconUrl from '@/assets/icons/back.svg'
+import scanIconUrl from '@/assets/icons/scan.svg'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { APP_NAME, ROUTES } from '@/lib/constants'
 import type { Theme } from '@/lib/theme'
 
 const props = defineProps<{
   theme: Theme
 }>()
 
-defineEmits<{
-  'toggle-theme': []
-}>()
+const router = useRouter()
+const route = useRoute()
+const isScanRoute = computed(() => route.path === ROUTES.scan)
+const isViewRoute = computed(() => route.path === ROUTES.view)
+const showBackButton = computed(() => isScanRoute.value || isViewRoute.value)
+const showScanLink = computed(() => route.path !== ROUTES.scan)
+const iconFilter = computed(() =>
+  props.theme === 'dark'
+    ? 'brightness(0) saturate(100%) invert(1)'
+    : 'brightness(0) saturate(100%)',
+)
+
+function goBack() {
+  if (isViewRoute.value) {
+    router.replace(ROUTES.create)
+    return
+  }
+
+  if (window.history.length > 1) {
+    router.back()
+    return
+  }
+
+  router.replace(ROUTES.create)
+}
 </script>
 
 <template>
   <header class="header">
     <div class="header__inner">
-      <RouterLink class="header__brand" :to="ROUTES.create">{{
-        APP_NAME
-      }}</RouterLink>
-
-      <div class="header__actions">
-        <RouterLink class="header__scan-link" :to="ROUTES.scan">
-          <svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="M5.75 3.75a2 2 0 0 0-2 2v2a.75.75 0 0 0 1.5 0v-2a.5.5 0 0 1 .5-.5h2a.75.75 0 0 0 0-1.5h-2Zm10.5 0a.75.75 0 0 0 0 1.5h2a.5.5 0 0 1 .5.5v2a.75.75 0 0 0 1.5 0v-2a2 2 0 0 0-2-2h-2Zm-10.5 14.5a.5.5 0 0 1-.5-.5v-2a.75.75 0 0 0-1.5 0v2a2 2 0 0 0 2 2h2a.75.75 0 0 0 0-1.5h-2Zm14.5-2.5a.75.75 0 0 0-1.5 0v2a.5.5 0 0 1-.5.5h-2a.75.75 0 0 0 0 1.5h2a2 2 0 0 0 2-2v-2ZM7.75 8.75a1 1 0 0 0-1 1v4.5a1 1 0 0 0 1 1h8.5a1 1 0 0 0 1-1v-4.5a1 1 0 0 0-1-1h-8.5Zm.5 1.5h7.5v3.5h-7.5v-3.5Zm1.5.75a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5h-1.5Zm3 0a.75.75 0 0 0 0 1.5h2.5a.75.75 0 0 0 0-1.5h-2.5Z"
-              fill="currentColor"
-            />
-          </svg>
-          <span>Scan</span>
+      <button
+        v-if="showBackButton"
+        class="header__back"
+        type="button"
+        @click="goBack"
+      >
+        <img
+          class="header__icon"
+          :src="backIconUrl"
+          :style="{ filter: iconFilter }"
+          alt=""
+          aria-hidden="true"
+        />
+        Back
+      </button>
+      <template v-else>
+        <RouterLink class="header__brand" :to="ROUTES.create">
+          <img class="header__brand-mark" src="/favicon.svg" :alt="APP_NAME" />
+          <span class="header__brand-label">{{ APP_NAME }}</span>
         </RouterLink>
-
-        <a
-          class="header__icon-button"
-          :href="APP_REPO_URL"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="View source on GitHub"
-        >
-          <svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="M12 2.75a9.25 9.25 0 0 0-2.924 18.026c.462.086.612-.196.612-.437v-1.7c-2.49.542-3.015-1.056-3.015-1.056-.408-1.036-.997-1.311-.997-1.311-.815-.557.062-.546.062-.546.902.063 1.376.926 1.376.926.801 1.373 2.102.976 2.615.746.081-.58.313-.976.57-1.2-1.988-.226-4.079-.994-4.079-4.424 0-.977.35-1.777.925-2.403-.093-.226-.4-1.137.088-2.37 0 0 .755-.241 2.475.917A8.57 8.57 0 0 1 12 7.28a8.57 8.57 0 0 1 2.254.303c1.72-1.158 2.474-.917 2.474-.917.489 1.233.182 2.144.09 2.37.576.626.924 1.426.924 2.403 0 3.438-2.095 4.195-4.09 4.417.322.278.609.828.609 1.668v2.472c0 .243.148.527.617.437A9.25 9.25 0 0 0 12 2.75Z"
-              fill="currentColor"
-            />
-          </svg>
-        </a>
-
-        <button
-          class="header__icon-button"
-          type="button"
-          :aria-label="
-            props.theme === 'dark'
-              ? 'Switch to light mode'
-              : 'Switch to dark mode'
-          "
-          @click="$emit('toggle-theme')"
-        >
-          <svg
-            v-if="props.theme === 'dark'"
-            class="header__icon"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
+        <nav class="header__nav" aria-label="Primary">
+          <RouterLink
+            class="header__link"
+            :class="{ 'header__link--active': route.path === ROUTES.scan }"
+            :to="ROUTES.scan"
           >
-            <path
-              d="M12 4.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V5.5a.75.75 0 0 1 .75-.75Zm0 11.5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V17a.75.75 0 0 1 .75-.75Zm7.25-5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1 0-1.5h1.5Zm-13 0a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1 0-1.5h1.5Zm8.662-4.412a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 1 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061Zm-7.864 7.864a.75.75 0 0 1 1.06 0l1.061 1.061a.75.75 0 0 1-1.06 1.06l-1.061-1.06a.75.75 0 0 1 0-1.061Zm8.924 1.06a.75.75 0 0 1 1.06-1.06l1.061 1.06a.75.75 0 1 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061Zm-7.864-7.863a.75.75 0 0 1 0 1.06L7.048 10.02a.75.75 0 1 1-1.06-1.061l1.06-1.06a.75.75 0 0 1 1.06 0ZM12 8.25A3.75 3.75 0 1 1 8.25 12 3.754 3.754 0 0 1 12 8.25Zm0 1.5A2.25 2.25 0 1 0 14.25 12 2.253 2.253 0 0 0 12 9.75Z"
-              fill="currentColor"
+            <img
+              class="header__icon"
+              :src="scanIconUrl"
+              :style="{ filter: iconFilter }"
+              alt=""
+              aria-hidden="true"
             />
-          </svg>
-          <svg
-            v-else
+            Scan
+          </RouterLink>
+        </nav>
+      </template>
+      <nav
+        v-if="showScanLink && showBackButton"
+        class="header__nav"
+        aria-label="Primary"
+      >
+        <RouterLink class="header__link" :to="ROUTES.scan">
+          <img
             class="header__icon"
-            viewBox="0 0 24 24"
+            :src="scanIconUrl"
+            :style="{ filter: iconFilter }"
+            alt=""
             aria-hidden="true"
-          >
-            <path
-              d="M14.996 3.75a.75.75 0 0 1 .648 1.127 7.25 7.25 0 1 0 3.478 9.27.75.75 0 0 1 1.405.523A8.75 8.75 0 1 1 14.35 3.924a.748.748 0 0 1 .646-.174Z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-      </div>
+          />
+          Scan
+        </RouterLink>
+      </nav>
     </div>
   </header>
 </template>
 
 <style scoped>
 .header {
-  padding: var(--space-4) var(--space-4) 0;
+  padding: var(--space-3) var(--space-4) 0;
 }
 
 .header__inner {
-  width: min(100%, 56rem);
+  width: min(100%, var(--content-max-width));
   margin: 0 auto;
-  padding: 0.85rem 0.95rem;
+  min-height: 2.25rem;
+  padding: 0 0 var(--space-3);
   display: flex;
   gap: var(--space-3);
   align-items: center;
   justify-content: space-between;
-  border: 1px solid var(--color-border);
-  border-radius: calc(var(--radius-lg) + 0.15rem);
-  background: color-mix(in srgb, var(--color-surface-strong) 88%, transparent);
-  box-shadow: var(--shadow-card);
-  backdrop-filter: blur(18px) saturate(1.1);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .header__brand {
-  font-size: 1.05rem;
-  font-weight: 650;
-  color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   text-decoration: none;
-  letter-spacing: -0.03em;
+  color: var(--color-text);
 }
 
-.header__actions {
+.header__brand-mark {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: block;
+}
+
+.header__brand-label {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.header__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+}
+
+.header__nav {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  flex-wrap: wrap;
+  gap: 0.875rem;
 }
 
-.header__icon-button {
+.header__link {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 2.7rem;
-  height: 2.7rem;
+  gap: 0.45rem;
+  min-height: 2.25rem;
   padding: 0;
-  border-radius: 1rem;
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  background: var(--color-panel-muted);
+  color: var(--color-muted);
   text-decoration: none;
-}
-
-.header__scan-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: 2.7rem;
-  padding: 0 1rem;
-  border-radius: 1rem;
-  border: 1px solid var(--color-border);
-  color: var(--color-primary-contrast);
-  background: var(--color-primary);
-  text-decoration: none;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 500;
 }
 
 .header__icon {
-  width: 1.1rem;
-  height: 1.1rem;
+  width: 1rem;
+  height: 1rem;
+  display: block;
+}
+
+.header__link--active {
+  color: var(--color-text);
+  text-decoration: underline;
 }
 
 @media (max-width: 640px) {
   .header__inner {
     width: 100%;
-  }
-
-  .header__brand {
-    font-size: 0.98rem;
   }
 }
 </style>

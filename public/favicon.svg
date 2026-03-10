@@ -1,31 +1,10 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="120" fill="#0F172A" />
-  <rect x="82" y="82" width="128" height="128" rx="28" fill="#F8FAFC" />
-  <rect x="82" y="302" width="128" height="128" rx="28" fill="#F8FAFC" />
-  <rect x="302" y="82" width="128" height="128" rx="28" fill="#F8FAFC" />
-  <path
-    d="M280 328C280 311.431 293.431 298 310 298H347C363.569 298 377 311.431 377 328V365C377 381.569 363.569 395 347 395H310C293.431 395 280 381.569 280 365V328Z"
-    fill="#F8FAFC"
-  />
-  <path
-    d="M368 258L415 211"
-    stroke="#38BDF8"
-    stroke-width="34"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
-  <path
-    d="M415 211V252"
-    stroke="#38BDF8"
-    stroke-width="34"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
-  <path
-    d="M415 211H374"
-    stroke="#38BDF8"
-    stroke-width="34"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
+  <rect width="512" height="512" rx="120" fill="#171717" />
+  <g transform="translate(80 80) scale(14.6667)" stroke="#F5F4EF" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 8V5C3 3.89543 3.89543 3 5 3H8" stroke-width="2" fill="none" />
+    <path d="M16 3H19C20.1046 3 21 3.89543 21 5V8" stroke-width="2" fill="none" />
+    <path d="M21 16V19C21 20.1046 20.1046 21 19 21H16" stroke-width="2" fill="none" />
+    <path d="M8 21H5C3.89543 21 3 20.1046 3 19V16" stroke-width="2" fill="none" />
+    <path d="M23.005 11.995L1.005 11.995" stroke-width="2" fill="none" />
+  </g>
 </svg>

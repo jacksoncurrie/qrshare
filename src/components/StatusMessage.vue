@@ -12,28 +12,32 @@ defineProps<{
 
 <style scoped>
 .status {
+  --status-color: var(--color-text);
   margin: 0;
-  padding: 0.9rem 1rem;
-  border-radius: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
+  border-left-width: 3px;
+  border-left-color: var(--status-color);
   font-size: 0.95rem;
   line-height: 1.4;
   background: var(--color-panel-muted);
+  color: var(--status-color);
 }
 
 .status--info {
-  color: color-mix(in srgb, var(--color-text) 85%, #2a7fff);
+  --status-color: var(--color-text);
 }
 
 .status--success {
-  color: var(--color-success);
+  --status-color: var(--color-success);
 }
 
 .status--warning {
-  color: var(--color-warning);
+  --status-color: var(--color-warning);
 }
 
 .status--error {
-  color: var(--color-error);
+  --status-color: var(--color-error);
 }
 </style>

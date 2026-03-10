@@ -6,10 +6,15 @@ test('create screen loads and generates a qr share link', async ({ page }) => {
   await expect(page.getByLabel('Text to share')).toBeVisible()
   await page.getByLabel('Text to share').fill('hello from playwright')
 
-  await expect(page.getByLabel('Share link')).toHaveValue(/\/view#v1\.p\./)
-  await expect(
-    page.getByAltText('QR code for opening the shared text in QR Share'),
-  ).toBeVisible()
+  const qr = page.getByAltText(
+    'QR code for opening the shared text in QR Share',
+  )
+  await expect(qr).toBeVisible()
+
+  const copyTarget = page.getByRole('button', { name: 'Copy link' })
+
+  await copyTarget.hover()
+  await expect(page.getByText('Click to copy')).toBeVisible()
 })
 
 test('theme toggle switches the app theme', async ({ page }) => {

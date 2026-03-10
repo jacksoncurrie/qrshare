@@ -24,7 +24,6 @@ const router = createRouter({
       component: ScanView,
       meta: {
         title: ROUTE_TITLES[ROUTES.scan],
-        fullscreen: true,
       },
     },
     {

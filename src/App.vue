@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { RouterView, useRoute } from 'vue-router'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { RouterView } from 'vue-router'
 import AppFooter from '@/components/AppFooter.vue'
 import AppHeader from '@/components/AppHeader.vue'
 import {
@@ -12,10 +12,8 @@ import {
   watchSystemTheme,
 } from '@/lib/theme'
 
-const route = useRoute()
 const theme = ref<Theme>(getInitialTheme())
 const followsSystem = ref(!hasStoredThemePreference())
-const showShell = computed(() => route.meta.fullscreen !== true)
 
 let stopWatchingSystemTheme = () => undefined
 
@@ -48,12 +46,12 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="app-shell" :class="{ 'app-shell--fullscreen': !showShell }">
-    <AppHeader v-if="showShell" :theme="theme" @toggle-theme="toggleTheme" />
-    <main class="app-main" :class="{ 'app-main--fullscreen': !showShell }">
+  <div class="app-shell">
+    <AppHeader :theme="theme" />
+    <main class="app-main">
       <RouterView />
     </main>
-    <AppFooter v-if="showShell" />
+    <AppFooter :theme="theme" @toggle-theme="toggleTheme" />
   </div>
 </template>
 
@@ -64,19 +62,9 @@ onBeforeUnmount(() => {
   grid-template-rows: auto 1fr auto;
 }
 
-.app-shell--fullscreen {
-  display: block;
-}
-
 .app-main {
   width: min(100%, var(--content-max-width));
   margin: 0 auto;
-  padding: var(--space-5) var(--space-4) var(--space-8);
-}
-
-.app-main--fullscreen {
-  width: 100%;
-  max-width: none;
-  padding: 0;
+  padding: var(--space-4);
 }
 </style>

@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+dev-dist
 dist-ssr
 *.local
 playwright-report
@@ -25,4 +26,3 @@ output/playwright
 *.njsproj
 *.sln
 *.sw?
-dev-dist/*

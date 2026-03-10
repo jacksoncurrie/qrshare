@@ -25,9 +25,7 @@ describe('CreateView', () => {
       },
     })
 
-    expect(
-      (wrapper.get('#generated-link').element as HTMLInputElement).value,
-    ).toBe('')
+    expect(wrapper.find('#generated-link').exists()).toBe(false)
     expect(wrapper.get('button').attributes('disabled')).toBeDefined()
   })
 
@@ -45,10 +43,8 @@ describe('CreateView', () => {
     vi.advanceTimersByTime(120)
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.text()).toContain('too large for QR Share v1')
-    expect(
-      (wrapper.get('#generated-link').element as HTMLInputElement).value,
-    ).toBe('')
+    expect(wrapper.text()).toContain('Text is too large to generate QR code.')
+    expect(wrapper.get('button').attributes('disabled')).toBeDefined()
   })
 
   it('generates a link automatically for valid input', async () => {
@@ -65,8 +61,6 @@ describe('CreateView', () => {
     vi.advanceTimersByTime(120)
     await wrapper.vm.$nextTick()
 
-    expect(
-      (wrapper.get('#generated-link').element as HTMLInputElement).value,
-    ).toContain('/view#v1.p.')
+    expect(wrapper.get('button').attributes('disabled')).toBeUndefined()
   })
 })
