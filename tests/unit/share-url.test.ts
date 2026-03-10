@@ -7,6 +7,16 @@ describe('share url helpers', () => {
     )
   })
 
+  it('includes the configured base path in production-style urls', () => {
+    vi.stubEnv('BASE_URL', '/qrshare/')
+
+    expect(buildShareUrl('v1.p.aGVsbG8', 'https://example.com')).toBe(
+      'https://example.com/qrshare/view#v1.p.aGVsbG8',
+    )
+
+    vi.unstubAllEnvs()
+  })
+
   it('extracts a payload from a full url or raw payload', () => {
     expect(extractPayloadFromInput('v1.p.aGVsbG8')).toBe('v1.p.aGVsbG8')
     expect(
