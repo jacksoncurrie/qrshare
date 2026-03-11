@@ -21,6 +21,9 @@ const iconFilter = computed(() =>
     ? 'brightness(0) saturate(100%) invert(1)'
     : 'brightness(0) saturate(100%)',
 )
+const brandIconFilter = computed(() =>
+  props.theme === 'dark' ? 'brightness(0) saturate(100%)' : 'none',
+)
 
 function goBack() {
   if (isViewRoute.value) {
@@ -57,7 +60,14 @@ function goBack() {
       </button>
       <template v-else>
         <RouterLink class="header__brand" :to="ROUTES.create">
-          <img class="header__brand-mark" src="/favicon.svg" :alt="APP_NAME" />
+          <span class="header__brand-mark" aria-hidden="true">
+            <img
+              class="header__brand-mark-icon"
+              :src="scanIconUrl"
+              :style="{ filter: brandIconFilter }"
+              alt=""
+            />
+          </span>
           <span class="header__brand-label">{{ APP_NAME }}</span>
         </RouterLink>
         <nav class="header__nav" aria-label="Primary">
@@ -125,6 +135,17 @@ function goBack() {
 .header__brand-mark {
   width: 1.75rem;
   height: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.4rem;
+  background: var(--color-primary);
+  flex: 0 0 auto;
+}
+
+.header__brand-mark-icon {
+  width: 1.15rem;
+  height: 1.15rem;
   display: block;
 }
 
