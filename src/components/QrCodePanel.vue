@@ -8,6 +8,7 @@ const props = defineProps<{
   title?: string
   emptyText?: string
   bare?: boolean
+  altText?: string
 }>()
 
 const qrDataUrl = ref('')
@@ -17,7 +18,7 @@ let latestRequestId = 0
 let stopWatchingTheme: () => void = () => {}
 
 const altText = computed(
-  () => `QR code for opening the shared text in ${APP_NAME}`,
+  () => props.altText ?? `QR code for opening the shared text in ${APP_NAME}`,
 )
 
 function readQrColors() {

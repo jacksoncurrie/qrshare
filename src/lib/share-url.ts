@@ -30,3 +30,23 @@ export function extractPayloadFromInput(input: string): string {
     return ''
   }
 }
+
+export function normalizeDirectUrl(input: string): string {
+  const trimmed = input.trim()
+
+  if (!trimmed) {
+    return ''
+  }
+
+  try {
+    const parsed = new URL(trimmed)
+
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return ''
+    }
+
+    return parsed.toString()
+  } catch {
+    return ''
+  }
+}

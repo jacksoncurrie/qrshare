@@ -1,4 +1,8 @@
-import { buildShareUrl, extractPayloadFromInput } from '@/lib/share-url'
+import {
+  buildShareUrl,
+  extractPayloadFromInput,
+  normalizeDirectUrl,
+} from '@/lib/share-url'
 
 describe('share url helpers', () => {
   it('builds a local development url', () => {
@@ -23,5 +27,13 @@ describe('share url helpers', () => {
       extractPayloadFromInput('https://example.com/view#v1.p.aGVsbG8'),
     ).toBe('v1.p.aGVsbG8')
     expect(extractPayloadFromInput('https://example.com/view')).toBe('')
+  })
+
+  it('normalizes valid direct urls and rejects unsupported protocols', () => {
+    expect(normalizeDirectUrl('https://example.com/test?q=1')).toBe(
+      'https://example.com/test?q=1',
+    )
+    expect(normalizeDirectUrl('mailto:test@example.com')).toBe('')
+    expect(normalizeDirectUrl('not a url')).toBe('')
   })
 })

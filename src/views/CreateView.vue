@@ -1,19 +1,49 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import QrCodePanel from '@/components/QrCodePanel.vue'
-import { COPY_SUCCESS_TIMEOUT_MS } from '@/lib/constants'
+import { APP_NAME, COPY_SUCCESS_TIMEOUT_MS } from '@/lib/constants'
 import { copyText } from '@/lib/copy'
 import {
   encodePayload,
   getPayloadErrorMessage,
   PayloadError,
 } from '@/lib/payload'
-import { buildShareUrl } from '@/lib/share-url'
+import { buildShareUrl, normalizeDirectUrl } from '@/lib/share-url'
 
-const inputText = ref('')
+type CreateMode = 'text' | 'url'
+
+const activeMode = ref<CreateMode>('text')
+const inputValue = ref('')
 const generatedUrl = ref('')
 const errorMessage = ref('')
 const copyStatus = ref<'idle' | 'success' | 'error'>('idle')
+
+const modeOptions: Array<{ label: string; value: CreateMode }> = [
+  { label: 'Text', value: 'text' },
+  { label: 'URL', value: 'url' },
+]
+
+const inputLabel = computed(() =>
+  activeMode.value === 'text' ? 'Text to share' : 'URL to share',
+)
+
+const inputPlaceholder = computed(() =>
+  activeMode.value === 'text'
+    ? 'Enter text here to generate the QR code...'
+    : 'Enter a full URL like https://example.com',
+)
+
+const qrEmptyText = computed(() =>
+  activeMode.value === 'text'
+    ? 'Waiting for text. QR code will appear here.'
+    : 'Waiting for a valid URL. QR code will appear here.',
+)
+
+const qrAltText = computed(() =>
+  activeMode.value === 'text'
+    ? `QR code for opening the shared text in ${APP_NAME}`
+    : `QR code for opening the shared URL in ${APP_NAME}`,
+)
 
 let debounceHandle: number | undefined
 let copyStatusHandle: number | undefined
@@ -40,10 +70,10 @@ async function copyGeneratedUrl() {
   resetCopyStatus()
 }
 
-watch(inputText, () => {
+watch([activeMode, inputValue], () => {
   window.clearTimeout(debounceHandle)
 
-  if (!inputText.value.trim()) {
+  if (!inputValue.value.trim()) {
     generatedUrl.value = ''
     errorMessage.value = ''
     copyStatus.value = 'idle'
@@ -52,8 +82,21 @@ watch(inputText, () => {
 
   debounceHandle = window.setTimeout(() => {
     try {
-      const { encodedPayload } = encodePayload(inputText.value)
-      generatedUrl.value = buildShareUrl(encodedPayload)
+      if (activeMode.value === 'text') {
+        const { encodedPayload } = encodePayload(inputValue.value)
+        generatedUrl.value = buildShareUrl(encodedPayload)
+        errorMessage.value = ''
+        copyStatus.value = 'idle'
+        return
+      }
+
+      const normalizedUrl = normalizeDirectUrl(inputValue.value)
+
+      if (!normalizedUrl) {
+        throw new PayloadError('invalid_direct_url')
+      }
+
+      generatedUrl.value = normalizedUrl
       errorMessage.value = ''
       copyStatus.value = 'idle'
     } catch (error) {
@@ -61,7 +104,7 @@ watch(inputText, () => {
       errorMessage.value =
         error instanceof PayloadError
           ? getPayloadErrorMessage(error.code)
-          : 'QR Share could not generate that link.'
+          : 'QR Share could not generate that QR code.'
       copyStatus.value = 'idle'
     }
   }, 120)
@@ -78,12 +121,32 @@ onBeforeUnmount(() => {
     <section class="create-view__input">
       <textarea
         id="payload-input"
-        v-model="inputText"
+        v-model="inputValue"
         :class="{ 'create-view__textarea--error': errorMessage }"
         rows="8"
-        placeholder="Enter text here to generate the QR code..."
-        aria-label="Text to share"
+        :placeholder="inputPlaceholder"
+        :aria-label="inputLabel"
       />
+
+      <div
+        class="create-view__mode-switch"
+        role="group"
+        aria-label="Share mode"
+      >
+        <button
+          v-for="option in modeOptions"
+          :key="option.value"
+          class="create-view__mode-pill"
+          :class="{
+            'create-view__mode-pill--active': activeMode === option.value,
+          }"
+          type="button"
+          :aria-pressed="activeMode === option.value"
+          @click="activeMode = option.value"
+        >
+          {{ option.label }}
+        </button>
+      </div>
 
       <p v-if="errorMessage" class="create-view__error">
         {{ errorMessage }}
@@ -94,8 +157,9 @@ onBeforeUnmount(() => {
       <div class="create-view__qr-wrap">
         <QrCodePanel
           :value="generatedUrl"
+          :alt-text="qrAltText"
           bare
-          empty-text="Waiting for text. QR code will appear here."
+          :empty-text="qrEmptyText"
         />
         <button
           class="create-view__qr-action"
@@ -138,6 +202,37 @@ onBeforeUnmount(() => {
   resize: none;
   font-size: 1rem;
   line-height: 1.6;
+}
+
+.create-view__mode-switch {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.35rem;
+}
+
+.create-view__mode-pill {
+  min-width: 0;
+  min-height: 0;
+  padding: 0.56rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-surface) 97%, transparent);
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 0.84rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: none;
+}
+
+.create-view__mode-pill:hover {
+  border-color: var(--color-border-strong);
+}
+
+.create-view__mode-pill--active {
+  border-color: color-mix(in srgb, var(--color-text) 12%, var(--color-border));
+  background: var(--color-qr-panel);
+  color: var(--color-text);
 }
 
 .create-view__textarea--error {

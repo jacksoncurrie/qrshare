@@ -1,6 +1,6 @@
 # QR Share
 
-QR Share is a small open-source PWA for handing off short text between nearby devices with QR codes.
+QR Share is a small open-source PWA for handing off short text and URLs between nearby devices with QR codes.
 
 It creates app-specific URLs like `/view#v1.p.<payload>`, renders them as QR codes, and decodes them locally on the receiving device. There is no backend, no account system, and no cloud storage.
 
@@ -20,6 +20,7 @@ It is not trying to be a secret-sharing tool, a file transfer app, or a general 
 ## Features
 
 - Enter short text and generate an app-specific QR Share link automatically.
+- Switch to URL mode and generate a direct QR code for any valid `http` or `https` link.
 - Render that link as a QR code and copy the generated link directly from the QR area.
 - Open a QR Share URL directly and decode the payload locally.
 - Scan QR Share codes with the device camera.
@@ -32,7 +33,7 @@ It is not trying to be a secret-sharing tool, a file transfer app, or a general 
 
 ![QR Share create screen](docs/assets/create-screen.png)
 
-Type once and get the QR code immediately. The QR area also acts as the copy target for the generated link.
+Type once, or switch to URL mode, and get the QR code immediately. The QR area also acts as the copy target for the generated link.
 
 ### View
 
@@ -74,15 +75,15 @@ Important caveats:
 - Anyone with the QR code or link can read the content.
 - QR Share is not suitable for high-value secrets in public settings.
 - Camera access is only requested when the user enters the scan flow.
-- v1 only accepts QR Share payloads, not arbitrary QR content.
+- The scan flow only accepts QR Share payloads, not arbitrary QR content.
 
 See [SECURITY.md](SECURITY.md) for reporting guidance and security boundaries.
 
 ## Limits And Caveats
 
-- v1 supports plain text only.
+- Create mode supports plain text payloads and direct `http`/`https` URLs.
 - Payloads above 800 UTF-8 bytes are blocked.
-- QR Share only accepts app-specific QR payloads in v1.
+- QR Share only accepts app-specific QR payloads in the in-app scan and view flows.
 - First-time visitors who are fully offline cannot load the app until it has been cached once.
 - Camera scanning depends on `getUserMedia` support and user permission.
 

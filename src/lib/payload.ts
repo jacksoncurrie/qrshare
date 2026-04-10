@@ -15,6 +15,7 @@ export type PayloadMode = 'plain'
 export type PayloadErrorCode =
   | 'empty_input'
   | 'payload_too_large'
+  | 'invalid_direct_url'
   | 'invalid_format'
   | 'unsupported_version'
   | 'unsupported_mode'
@@ -118,6 +119,8 @@ export function getPayloadErrorMessage(code: PayloadErrorCode): string {
       return 'Enter some text before generating a QR code.'
     case 'payload_too_large':
       return 'Text is too large to generate QR code.'
+    case 'invalid_direct_url':
+      return 'Enter a valid URL including http:// or https://.'
     case 'invalid_format':
       return 'That QR Share payload is not in a valid format.'
     case 'unsupported_version':
